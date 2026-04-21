@@ -100,7 +100,7 @@ Usage:
   bash $0 batch
 
 Examples:
-  bash $0 single MEL131HAP_CA21_4_2
+  bash $0 single MEL131
   bash $0 batch
 EOF
   exit 1
