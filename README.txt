@@ -17,6 +17,14 @@ This study integrates multiple analytical components to provide a unified view o
 - **Part 3:** Identification and validation of rare-variant associations across protein-coding genes, noncoding RNAs, and cCREs  
 - **Part 4:** Integrative analysis of common and rare variants to delineate their joint, as well as distinct and complementary, contributions to CM genetic risk and underlying biology
 
+<p align="center">
+  <img src="figures/Study.Overview.png" width="750">
+</p>
+
+<p align="center">
+  <b>Figure 1.</b> Study Overview.
+</p>
+
 ---
 
 ## ⚙️Execution Workflow
