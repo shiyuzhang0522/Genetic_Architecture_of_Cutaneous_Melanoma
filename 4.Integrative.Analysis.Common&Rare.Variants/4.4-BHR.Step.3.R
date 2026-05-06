@@ -30,10 +30,10 @@ cat("[INFO] Packages loaded.\n")
 ############################################################
 ## Step 2) Define inputs
 ############################################################
-ref_file     <- "/public/home/hpc8301200407/software/BHR/bhr/reference_files/ms_baseline_oe5.txt"
-sum_dir      <- "/public/home/hpc8301200407/WGS/Melanoma_WGS/BHR/pipeline/input/runs_by_freqbin"
-gene_set_dir <- "/public/home/hpc8301200407/WGS/Melanoma_WGS/BHR/pipeline/Gene.Set.Enrichment.Analysis/Gene.Set.Annotations"
-out_dir      <- "/public/home/hpc8301200407/WGS/Melanoma_WGS/BHR/updated.pipeline.Fixed.Genes/results"
+ref_file     <- "/path/BHR/bhr/reference_files/ms_baseline_oe5.txt"
+sum_dir      <- "/path/WGS/Melanoma_WGS/BHR/pipeline/input/runs_by_freqbin"
+gene_set_dir <- "/path/WGS/Melanoma_WGS/BHR/pipeline/Gene.Set.Enrichment.Analysis/Gene.Set.Annotations"
+out_dir      <- "/path/WGS/Melanoma_WGS/BHR/updated.pipeline.Fixed.Genes/results"
 
 dir.create(out_dir, recursive = TRUE, showWarnings = FALSE)
 

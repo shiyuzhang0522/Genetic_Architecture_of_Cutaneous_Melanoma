@@ -43,7 +43,7 @@ cat(sprintf("[INFO] locus_id = %s\n", locus_id))
 ###############################################################################
 ## Working directory
 ###############################################################################
-base_wd <- "/public/home/hpc8301200407/WGS/Melanoma_WGS/GWAS_Finemapping/Finemapping-CARMA/4.CARMA"
+base_wd <- "/path/GWAS_Finemapping/Finemapping-CARMA/4.CARMA"
 locus_dir <- file.path(base_wd, paste0("locusA_", locus_id))
 
 dir.create(locus_dir, recursive = TRUE, showWarnings = FALSE)
@@ -54,19 +54,19 @@ cat(sprintf("[INFO] Working directory set to: %s\n", getwd()))
 ## Input paths
 ###############################################################################
 locus_gwas <- sprintf(
-  "/public/home/hpc8301200407/WGS/Melanoma_WGS/GWAS_Finemapping/Finemapping-CARMA/1.Extract_GWAS_loci/per_locus.filtered/locusA_%s.txt",
+  "/path/GWAS_Finemapping/Finemapping-CARMA/1.Extract_GWAS_loci/per_locus.filtered/locusA_%s.txt",
   locus_id
 )
 locus_ld <- sprintf(
-  "/public/home/hpc8301200407/WGS/Melanoma_WGS/GWAS_Finemapping/Finemapping-CARMA/3.LD/locusA_%s.LD.ld",
+  "/path/GWAS_Finemapping/Finemapping-CARMA/3.LD/locusA_%s.LD.ld",
   locus_id
 )
 locus_ids <- sprintf(
-  "/public/home/hpc8301200407/WGS/Melanoma_WGS/GWAS_Finemapping/Finemapping-CARMA/3.LD/locusA_%s.LD.tags.list",
+  "/path/GWAS_Finemapping/Finemapping-CARMA/3.LD/locusA_%s.LD.tags.list",
   locus_id
 )
 locus_bim <- sprintf(
-  "/public/home/hpc8301200407/WGS/Melanoma_WGS/GWAS_Finemapping/Finemapping-CARMA/2.subset.GT/BED_subset/locusA_%s.bim",
+  "/path/GWAS_Finemapping/Finemapping-CARMA/2.subset.GT/BED_subset/locusA_%s.bim",
   locus_id
 )
 

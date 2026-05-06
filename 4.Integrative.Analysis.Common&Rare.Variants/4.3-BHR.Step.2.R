@@ -19,9 +19,9 @@ suppressPackageStartupMessages({
 ############################################################
 ## Step 2) Define inputs and helper functions
 ############################################################
-mask_dir   <- "/public/home/hpc8301200407/WGS/Melanoma_WGS/BHR/Coding.GT"
-counts_dir <- "/public/home/hpc8301200407/WGS/Melanoma_WGS/BHR/Coding.GT/UKB_RAP/"
-out_dir    <- "/public/home/hpc8301200407/WGS/Melanoma_WGS/BHR/pipeline/input"
+mask_dir   <- "/path/WGS/Melanoma_WGS/BHR/Coding.GT"
+counts_dir <- "/path/WGS/Melanoma_WGS/BHR/Coding.GT/UKB/"
+out_dir    <- "/path/WGS/Melanoma_WGS/BHR/pipeline/input"
 
 dir.create(out_dir, recursive = TRUE, showWarnings = FALSE)
 

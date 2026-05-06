@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 #SBATCH --job-name=PRS-CS
-#SBATCH --output=/public/home/hpc8301200407/WGS/Melanoma_WGS/PRS/My.PRS/PRScs/logs/%x_%A_%a.out
-#SBATCH --error=/public/home/hpc8301200407/WGS/Melanoma_WGS/PRS/My.PRS/PRScs/logs/%x_%A_%a.err
+#SBATCH --output=/path/WGS/Melanoma_WGS/PRS/My.PRS/PRScs/logs/%x_%A_%a.out
+#SBATCH --error=/path/WGS/Melanoma_WGS/PRS/My.PRS/PRScs/logs/%x_%A_%a.err
 #SBATCH --partition=fatQ
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
@@ -44,10 +44,10 @@ chr="${SLURM_ARRAY_TASK_ID}"
 ############################################################
 ## Step 2) Define input and output paths
 ############################################################
-ref_dir="/public/home/hpc8301200407/software/PRScs/LD.Ref.Panel/UKBB/ldblk_ukbb_eur"
-bim_prefix="/public/home/hpc8301200407/WGS/Melanoma_WGS/PRS/My.PRS/PRScs/snpinfo_ukbb_hm3"
-sst_file="/public/home/hpc8301200407/WGS/Melanoma_WGS/PRS/My.PRS/PRScs/GWAS.PRSCS.input.txt"
-out_dir="/public/home/hpc8301200407/WGS/Melanoma_WGS/PRS/My.PRS/PRScs/outputs/chr${chr}"
+ref_dir="/path/software/PRScs/LD.Ref.Panel/UKBB/ldblk_ukbb_eur"
+bim_prefix="/path/WGS/Melanoma_WGS/PRS/My.PRS/PRScs/snpinfo_ukbb_hm3"
+sst_file="/path/WGS/Melanoma_WGS/PRS/My.PRS/PRScs/GWAS.PRSCS.input.txt"
+out_dir="/path/WGS/Melanoma_WGS/PRS/My.PRS/PRScs/outputs/chr${chr}"
 
 mkdir -p "${out_dir}"
 
@@ -85,7 +85,7 @@ export OMP_NUM_THREADS="${threads}"
 ############################################################
 ## Step 7) Run PRS-CS
 ############################################################
-python /public/home/hpc8301200407/software/PRScs/PRScs.py \
+python /path/software/PRScs/PRScs.py \
   --ref_dir="${ref_dir}" \
   --bim_prefix="${bim_prefix}" \
   --sst_file="${sst_file}" \

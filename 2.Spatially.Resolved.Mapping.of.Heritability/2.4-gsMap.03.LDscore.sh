@@ -1,51 +1,38 @@
 #!/usr/bin/env bash
-#SBATCH --job-name=ldscore
-#SBATCH --output=/public/home/hpc8301200407/WGS/GWAS_ST/gsMap_pipeline/logs_step3/%x.%j.out
-#SBATCH --error=/public/home/hpc8301200407/WGS/GWAS_ST/gsMap_pipeline/logs_step3/%x.%j.err
-#SBATCH --partition=cpuQ
-#SBATCH --nodes=1
-#SBATCH --ntasks=1
-#SBATCH --cpus-per-task=16
-#SBATCH --qos=cpuq
-#SBATCH --account=pi_dengguangtong
-
-############################################################
-## gsMap pipeline
-## Step 3) Generate LD scores
-##
-## This script contains three usage modes:
-##   run     : run one sample-chromosome job
-##   submit  : submit all sample × chromosome jobs
-##   check   : check whether per-sample done files exist
-##
-## Usage:
-##   sbatch Step3.ldscore.sh run <sample_name> <chr>
-##   bash   Step3.ldscore.sh submit
-##   bash   Step3.ldscore.sh check
-##
-## Examples:
-##   sbatch Step3.ldscore.sh run MEL131
-##   bash   Step3.ldscore.sh submit
-##   bash   Step3.ldscore.sh check
-##
-## Author: Shelley
-############################################################
 
 set -euo pipefail
 
 ############################################################
-## Common paths
+# gsMap pipeline
+# Step 3: Generate LD scores
+#
+# Usage:
+#   bash Step3.ldscore.sh run <sample_name> <chr>
+#   bash Step3.ldscore.sh run-sample <sample_name>
+#   bash Step3.ldscore.sh run-all
+#   bash Step3.ldscore.sh check
+#
+# Examples:
+#   bash Step3.ldscore.sh run MEL131 1
+#   bash Step3.ldscore.sh run-sample MEL131
+#   bash Step3.ldscore.sh run-all
+#   bash Step3.ldscore.sh check
 ############################################################
-BASE_WD="/public/home/hpc8301200407/WGS/GWAS_ST/gsMap_pipeline"
-LOG_DIR="${BASE_WD}/logs_step3"
-GTF_FILE="/public/home/hpc8301200407/software/gsMap_resource/gencode.v49.basic.annotation.gtf"
+
+############################################################
+# Common paths
+############################################################
+
+BASE_WD="/path/to/gsMap_pipeline"
+GTF_FILE="/path/to/gencode.annotation.gtf"
 LDREF_ROOT="${BASE_WD}/LD_ref.panel"
 
-mkdir -p "${LOG_DIR}"
+N_THREADS=1
 
 ############################################################
-## Sample list
+# Sample list
 ############################################################
+
 SAMPLES=(
   MEL126
   MEL162
@@ -64,125 +51,146 @@ SAMPLES=(
 )
 
 ############################################################
-## Usage
+# Usage
 ############################################################
+
 usage() {
   cat <<EOF
 Usage:
-  sbatch $0 run <sample_name> <chr>
-  bash   $0 submit
-  bash   $0 check
+  bash $0 run <sample_name> <chr>
+  bash $0 run-sample <sample_name>
+  bash $0 run-all
+  bash $0 check
 
 Examples:
-  sbatch $0 run MEL131
-  bash   $0 submit
-  bash   $0 check
+  bash $0 run MEL131 1
+  bash $0 run-sample MEL131
+  bash $0 run-all
+  bash $0 check
 EOF
   exit 1
 }
 
 ############################################################
-## Part A) Run one sample-chromosome job
+# Activate environment
 ############################################################
+
+activate_env() {
+  if command -v conda >/dev/null 2>&1; then
+    eval "$(conda shell.bash hook)"
+    conda activate gsMap_new
+  else
+    echo "[WARN] conda command not found; assuming gsmap is already on PATH" >&2
+  fi
+}
+
+############################################################
+# Run one sample-chromosome job
+############################################################
+
 run_one_job() {
   local sample_name="$1"
   local chr="$2"
   local working_dir="${BASE_WD}/wd_${sample_name}"
+  local bfile_root="${LDREF_ROOT}/chr${chr}.UKBB_LD10k_MAF0.05"
 
-  echo "[INFO] Generating LD score for sample ${sample_name}, chr${chr}..."
-  echo "[INFO] Sample:       ${sample_name}"
-  echo "[INFO] Chromosome:   ${chr}"
-  echo "[INFO] Working dir:  ${working_dir}"
+  echo "[INFO] Generating LD score"
+  echo "[INFO] Sample:      ${sample_name}"
+  echo "[INFO] Chromosome:  ${chr}"
+  echo "[INFO] Working dir: ${working_dir}"
+  echo "[INFO] LD panel:    ${bfile_root}"
+  echo "[INFO] GTF file:    ${GTF_FILE}"
 
-  if command -v conda >/dev/null 2>&1; then
-    eval "$(conda shell.bash hook)"
-    conda activate gsMap_new || true
-  else
-    echo "[WARN] conda command not found; assuming gsmap is on PATH" >&2
-  fi
-
-  export OMP_NUM_THREADS="${SLURM_CPUS_PER_TASK:-1}"
+  export OMP_NUM_THREADS="${N_THREADS}"
 
   gsmap run_generate_ldscore \
     --workdir "${working_dir}" \
     --sample_name "${sample_name}" \
     --chrom "${chr}" \
-    --bfile_root "${LDREF_ROOT}/chr${chr}.UKBB_LD10k_MAF0.05" \
+    --bfile_root "${bfile_root}" \
     --gtf_annotation_file "${GTF_FILE}" \
     --gene_window_size 50000
 
-  echo "[INFO] Finished step 3: run_generate_ldscore for ${sample_name} chr${chr}"
+  echo "[INFO] Finished LD-score generation for ${sample_name}, chr${chr}"
 }
 
 ############################################################
-## Part B) Submit all jobs
+# Run all chromosomes for one sample
 ############################################################
-submit_all_jobs() {
-  mapfile -t IDLE_NODES < <(sinfo -h -N -p cpuQ -t idle -o '%N')
 
-  if [[ ${#IDLE_NODES[@]} -eq 0 ]]; then
-    echo "[ERROR] No idle nodes found in partition cpuQ" >&2
-    exit 1
-  fi
+run_one_sample() {
+  local sample_name="$1"
 
-  echo "[INFO] Idle nodes:"
-  printf '  %s\n' "${IDLE_NODES[@]}"
+  for chr in $(seq 1 22); do
+    run_one_job "${sample_name}" "${chr}"
+  done
 
-  local job_idx=0
+  echo "[INFO] Finished all chromosomes for ${sample_name}"
+}
 
+############################################################
+# Run all samples and chromosomes
+############################################################
+
+run_all_jobs() {
   for sample in "${SAMPLES[@]}"; do
     for chr in $(seq 1 22); do
-      local node="${IDLE_NODES[$((job_idx % ${#IDLE_NODES[@]}))]}"
-
-      echo "[SUBMIT] sample=${sample}, chr=${chr} -> node=${node}"
-
-      sbatch \
-        --nodelist="${node}" \
-        "$0" run "${sample}" "${chr}"
-
-      ((job_idx+=1))
+      run_one_job "${sample}" "${chr}"
     done
   done
 
-  echo "[INFO] All submissions done."
+  echo "[INFO] Finished all sample-chromosome jobs."
 }
 
 ############################################################
-## Part C) Check completion
+# Check completion
 ############################################################
+
 check_done_files() {
   echo "[CHECK] Looking for *_generate_ldscore.done files"
 
-  for s in "${SAMPLES[@]}"; do
-    done_file="${BASE_WD}/wd_${s}/${s}/generate_ldscore/${s}_generate_ldscore.done"
+  for sample in "${SAMPLES[@]}"; do
+    done_file="${BASE_WD}/wd_${sample}/${sample}/generate_ldscore/${sample}_generate_ldscore.done"
+
     if [[ -f "${done_file}" ]]; then
-      echo "[OK]   ${s}: found $(basename "${done_file}")"
+      echo "[OK]   ${sample}: found $(basename "${done_file}")"
     else
-      echo "[MISS] ${s}: DONE file not found"
+      echo "[MISS] ${sample}: DONE file not found"
     fi
   done
 }
 
 ############################################################
-## Parse mode
+# Parse mode
 ############################################################
+
 [[ $# -ge 1 ]] || usage
 
 mode="$1"
+
+activate_env
 
 case "${mode}" in
   run)
     [[ $# -eq 3 ]] || usage
     run_one_job "$2" "$3"
     ;;
-  submit)
-    [[ $# -eq 1 ]] || usage
-    submit_all_jobs
+
+  run-sample)
+    [[ $# -eq 2 ]] || usage
+    run_one_sample "$2"
     ;;
+
+  run-all)
+    [[ $# -eq 1 ]] || usage
+    run_all_jobs
+    ;;
+
   check)
     [[ $# -eq 1 ]] || usage
     check_done_files
     ;;
+
   *)
     usage
     ;;
