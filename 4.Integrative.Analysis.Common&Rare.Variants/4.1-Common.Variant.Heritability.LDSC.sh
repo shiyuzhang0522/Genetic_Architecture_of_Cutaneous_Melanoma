@@ -23,14 +23,14 @@ set -euo pipefail
 ## Step 0) Define inputs and outputs
 ############################################################
 in_sumstats="Meta.GWAS.melanoma1.QCed.txt"
-outdir="/public/home/hpc8301200407/WGS/Melanoma_WGS/BHR/LDSC/stable.liftover"
+outdir="/path/WGS/Melanoma_WGS/BHR/LDSC/stable.liftover"
 
 cups_bed="${outdir}/FASTA_BED.ALL_GRCh38.novel_CUPs.bed"
-chain="/public/home/hpc8301200407/software/liftover/hg38ToHg19.over.chain.gz"
+chain="/path/software/liftover/hg38ToHg19.over.chain.gz"
 
-ldsc_py="/public/home/hpc8301200407/software/ldsc/ldsc.py"
-ref_ld="/public/home/hpc8301200407/WGS/Melanoma_WGS/BHR/LDSC/LDscore/UKBB.EUR"
-w_ld="/public/home/hpc8301200407/WGS/Melanoma_WGS/BHR/LDSC/LDscore/UKBB.EUR"
+ldsc_py="/path/software/ldsc/ldsc.py"
+ref_ld="/path/WGS/Melanoma_WGS/BHR/LDSC/LDscore/UKBB.EUR"
+w_ld="/path/WGS/Melanoma_WGS/BHR/LDSC/LDscore/UKBB.EUR"
 
 ldsc_input="${outdir}/melanoma.GWAS.hg19.LDSC.input.txt"
 

@@ -29,22 +29,22 @@ suppressPackageStartupMessages({
 
 ## score files
 file_CADD_SNV <- paste0(
-  "/hpc/home/lijc/zhangsy/WGS_melanoma/WGS_annotation/CADD_annotation/CADD-scripts/",
+  "/path/WGS_melanoma/WGS_annotation/CADD_annotation/CADD-scripts/",
   "CADD.cutoff.20.SNVs.chr", chr, ".tsv"
 )
 
 file_CADD_INDEL <- paste0(
-  "/hpc/home/lijc/zhangsy/WGS_melanoma/WGS_annotation/CADD_annotation/CADD-scripts/",
+  "/path/WGS_melanoma/WGS_annotation/CADD_annotation/CADD-scripts/",
   "CADD.cutoff.20.indels.chr", chr, ".tsv"
 )
 
 file_GERP <- paste0(
-  "/hpc/home/lijc/zhangsy/WGS_melanoma/WGS_annotation/GERP_annotation/",
+  "/path/WGS_melanoma/WGS_annotation/GERP_annotation/",
   "GERP.cutoff.2.chr", chr, ".tsv"
 )
 
 file_JARVIS <- paste0(
-  "/hpc/home/lijc/zhangsy/WGS_melanoma/WGS_annotation/JARVIS/",
+  "/path/WGS_melanoma/WGS_annotation/JARVIS/",
   "jarvis_ranked_deduplicated.", chr, ".cutoff.0.99.hg38.tsv"
 )
 
@@ -55,7 +55,7 @@ JARVIS_data     <- fread(file_JARVIS, header = FALSE)
 
 ## QC-passed WGS variant list
 file_WGSQCpassed <- paste0(
-  "/hpc/home/lijc/zhangsy/WGS_melanoma/WGS_annotation/WGS_pvar/download_WGS_pvar/",
+  "/path/WGS_melanoma/WGS_annotation/WGS_pvar/download_WGS_pvar/",
   "WGS.chr", chr, ".QCpassed.varlist.vcf"
 )
 
@@ -215,7 +215,7 @@ cat("  Count based on mask (contains 'JARVIS'):      ", num_mask_JARVIS, "\n", s
 setorder(WGS_QCpassed, CHR, POS)
 
 output_file <- paste0(
-  "/hpc/home/lijc/zhangsy/WGS_melanoma/reordered_masks/",
+  "/path/WGS_melanoma/reordered_masks/",
   "WGS_QCpassed.chr", chr, ".three.score.mask.txt"
 )
 
@@ -226,7 +226,7 @@ fwrite(WGS_QCpassed, file = output_file, sep = "\t")
 ############################################################
 
 mel_cCRE_aggregates_file <- paste0(
-  "/hpc/home/lijc/zhangsy/WGS_melanoma/RV_aggregates/chr", chr,
+  "/path/WGS_melanoma/RV_aggregates/chr", chr,
   "/mel_cCRE_aggregates.chr", chr, ".txt"
 )
 
@@ -299,7 +299,7 @@ combined_wide <- combined_wide[order(combined_wide$mel_cCRE_uniqueID, combined_w
 ############################################################
 
 output_file <- paste0(
-  "/hpc/home/lijc/zhangsy/WGS_melanoma/reordered_masks/",
+  "/path/WGS_melanoma/reordered_masks/",
   "combined_mask.mel.cCRE.chr", chr, ".txt"
 )
 

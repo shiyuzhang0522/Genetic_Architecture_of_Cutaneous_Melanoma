@@ -1,14 +1,4 @@
 #!/usr/bin/env bash
-#SBATCH --job-name=vep_anno
-#SBATCH --partition=cpuQ
-#SBATCH --qos=cpuq
-#SBATCH --account=pi_dengguangtong
-#SBATCH --nodes=1
-#SBATCH --ntasks=1
-#SBATCH --cpus-per-task=2
-#SBATCH --mem=190464
-#SBATCH --output=logs/%x_%A_%a.out
-#SBATCH --error=logs/%x_%A_%a.err
 
 ############################################################
 ## VEP annotation of WGS variant lists (site-only VCF)
@@ -54,14 +44,14 @@ fi
 ############################################################
 ## Step 3) Define paths
 ############################################################
-SCRATCH_DIR="/public/home/hpc8301200407/Shelley"
+SCRATCH_DIR="/path/Shelley"
 
 INPUT_DIR="${SCRATCH_DIR}/plink2"
 OUTPUT_DIR="${SCRATCH_DIR}/variant.annotation/VEP_new"
 LOG_DIR="${OUTPUT_DIR}/log"
 
-CACHE_DIR="/public/home/hpc8301200407/tool/ensembl-vep/cache.annotations"
-SIF_IMAGE="/public/home/hpc8301200407/tool/vep.sif"
+CACHE_DIR="/path/tool/ensembl-vep/cache.annotations"
+SIF_IMAGE="/path/tool/vep.sif"
 
 REF_FASTA_DIR="${OUTPUT_DIR}/FASTA"
 REF_FASTA="${REF_FASTA_DIR}/Homo_sapiens.GRCh38.dna.toplevel.fa.gz"

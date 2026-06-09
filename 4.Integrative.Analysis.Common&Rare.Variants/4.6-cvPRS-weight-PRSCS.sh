@@ -6,8 +6,6 @@
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=8
-#SBATCH --qos=fatq
-#SBATCH --account=pi_dengguangtong
 #SBATCH --array=1-22
 
 ############################################################
