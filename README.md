@@ -60,7 +60,7 @@ Analyses were performed across:
 
 **The Genetic Architecture of Cutaneous Melanoma Across the Variant Spectrum**
 
-*Manuscript in preparation.*
+Preprint: https://doi.org/10.21203/rs.3.rs-9905413/v1
 
 ---
 
